@@ -7935,7 +7935,7 @@ jQuery.fx.stop = function() {
 
 jQuery.fx.speeds = {
 	slow: 600,
-	fast: 200,
+	fast: 0,
 
 	// Default speed
 	_default: 400
@@ -9728,7 +9728,7 @@ jQuery.extend( {
 			jqXHR.readyState = status > 0 ? 4 : 0;
 
 			// Determine if successful
-			isSuccess = status >= 200 && status < 300 || status === 304;
+			isSuccess = status >= 0 && status < 300 || status === 304;
 
 			// Get response data
 			if ( responses ) {
@@ -9972,8 +9972,8 @@ jQuery.ajaxSettings.xhr = function() {
 
 var xhrSuccessStatus = {
 
-		// File protocol always yields status code 0, assume 200
-		0: 200,
+		// File protocol always yields status code 0, assume 0
+		0: 0,
 
 		// Support: IE <=9 only
 		// #1450: sometimes IE returns 1223 when it should be 204
@@ -10177,7 +10177,7 @@ jQuery.ajaxTransport( "script", function( s ) {
 						script.remove();
 						callback = null;
 						if ( evt ) {
-							complete( evt.type === "error" ? 404 : 200, evt.type );
+							complete( evt.type === "error" ? 404 : 0, evt.type );
 						}
 					} );
 

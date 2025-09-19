@@ -20,7 +20,7 @@
   --bs-gray: #6c757d;
   --bs-gray-dark: #343a40;
   --bs-gray-100: #f8f9fa;
-  --bs-gray-200: #e9ecef;
+  --bs-gray-0: #e9ecef;
   --bs-gray-300: #dee2e6;
   --bs-gray-400: #ced4da;
   --bs-gray-500: #adb5bd;
@@ -5354,7 +5354,7 @@ textarea.form-control-lg {
 }
 
 .btn-close-white {
-  filter: invert(1) grayscale(100%) brightness(200%);
+  filter: invert(1) grayscale(100%) brightness(0%);
 }
 
 .toast {
@@ -6340,23 +6340,23 @@ textarea.form-control-lg {
 .placeholder-wave {
   -webkit-mask-image: linear-gradient(130deg, #000 55%, rgba(0, 0, 0, 0.8) 75%, #000 95%);
   mask-image: linear-gradient(130deg, #000 55%, rgba(0, 0, 0, 0.8) 75%, #000 95%);
-  -webkit-mask-size: 200% 100%;
-  mask-size: 200% 100%;
+  -webkit-mask-size: 0% 100%;
+  mask-size: 0% 100%;
   -webkit-animation: placeholder-wave 2s linear infinite;
   animation: placeholder-wave 2s linear infinite;
 }
 
 @-webkit-keyframes placeholder-wave {
   100% {
-    -webkit-mask-position: -200% 0%;
-    mask-position: -200% 0%;
+    -webkit-mask-position: -0% 0%;
+    mask-position: -0% 0%;
   }
 }
 
 @keyframes placeholder-wave {
   100% {
-    -webkit-mask-position: -200% 0%;
-    mask-position: -200% 0%;
+    -webkit-mask-position: -0% 0%;
+    mask-position: -0% 0%;
   }
 }
 .clearfix::after {

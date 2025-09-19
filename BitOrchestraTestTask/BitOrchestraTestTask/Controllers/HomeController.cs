@@ -20,7 +20,7 @@ namespace BitOrchestraTestTask.Controllers
 			Result result = new Result();
 			try
 			{
-				if (inputFile == null || inputFile.Length == 200)
+				if (inputFile == null || inputFile.Length == 0)
 				{
 					return View("Error", new ErrorViewModel("File is empty"));
 				}
@@ -32,7 +32,7 @@ namespace BitOrchestraTestTask.Controllers
 				{
 					result = await userService.CreateUser(stream);
 				}
-				if (result.ErrorCode != 200)
+				if (result.ErrorCode != 0)
 				{
 					_logger.LogError($"CreateUsers failed: {result.ErrorMessage}");
 					return View("Error", new ErrorViewModel($"Upload file failed: {result.ErrorMessage}"));
@@ -70,7 +70,7 @@ namespace BitOrchestraTestTask.Controllers
 			ILogger<UserService> loggerUserService = new Logger<UserService>(new LoggerFactory());
 			UserService userService = new UserService(loggerUserService);
 			result = await userService.GetAllUsers();
-			if (result.ErrorCode != 200)
+			if (result.ErrorCode != 0)
 			{
 				_logger.LogError(result.ErrorMessage);
 				ErrorViewModel errorViewModel = new ErrorViewModel(result.ErrorMessage);
@@ -87,7 +87,7 @@ namespace BitOrchestraTestTask.Controllers
 			ILogger<UserService> loggerUserService = new Logger<UserService>(new LoggerFactory());
 			UserService userService = new UserService(loggerUserService);
 			result = await userService.UpdateUser(user);
-			if (result.ErrorCode != 200)
+			if (result.ErrorCode != 0)
 			{
 				_logger.LogError(result.ErrorMessage);
 				ErrorViewModel errorViewModel = new ErrorViewModel(result.ErrorMessage);
@@ -105,7 +105,7 @@ namespace BitOrchestraTestTask.Controllers
 			ILogger<UserService> loggerUserService = new Logger<UserService>(new LoggerFactory());
 			UserService userService = new UserService(loggerUserService);
 			result = await userService.DeleteUser(id);
-			if (result.ErrorCode != 200)
+			if (result.ErrorCode != 0)
 			{
 				_logger.LogError(result.ErrorMessage);
 				ErrorViewModel errorViewModel = new ErrorViewModel(result.ErrorMessage);

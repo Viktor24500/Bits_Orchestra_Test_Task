@@ -39,7 +39,7 @@ namespace BitOrchestraTestTask.DAL
 						};
 						result.Data.Add(user);
 					}
-					result.ErrorCode = 200;
+					result.ErrorCode = 0;
 					return result;
 				}
 			}
@@ -61,7 +61,7 @@ namespace BitOrchestraTestTask.DAL
 					result.ErrorCode = 404;
 					result.ErrorMessage = "User not found";
 				}
-				result.ErrorCode = 200;
+				result.ErrorCode = 0;
 				return result;
 			}
 		}
@@ -110,7 +110,7 @@ namespace BitOrchestraTestTask.DAL
 					return result;
 				}
 			}
-			result.ErrorCode = 200;
+			result.ErrorCode = 0;
 			return result;
 		}
 
@@ -136,7 +136,7 @@ namespace BitOrchestraTestTask.DAL
 					result.ErrorCode = 404;
 					result.ErrorMessage = "User not updated";
 				}
-				result.ErrorCode = 200;
+				result.ErrorCode = 0;
 				return result;
 			}
 		}
