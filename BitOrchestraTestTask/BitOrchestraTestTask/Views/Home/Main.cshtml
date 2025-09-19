@@ -1,14 +1,15 @@
 ﻿@using BitOrchestraTestTask.BL
 @model List<User>
-<table>
+<input type="text" id="filterInput" onkeydown="Filter(event)" placeholder="Search">
+<table id="dataTable">
     <thead>
         <tr>
             <th hidden>Id</th>
-            <th>Name</th>
-            <th>DateOfBirth</th>
-            <th>Married</th>
-            <th>Phone</th>
-            <th>Salary</th>
+            <th onclick="Sort(1)">Name ASC DESC</th>
+            <th onclick="Sort(2)">DateOfBirth ASC DESC</th>
+            <th onclick="Sort(3)">Married ASC DESC</th>
+            <th onclick="Sort(4)">Phone ASC DESC</th>
+            <th onclick="Sort(5)">Salary ASC DESC</th>
             <th colspan="3"></th>
         </tr>
     </thead>
