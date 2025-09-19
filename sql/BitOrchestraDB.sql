@@ -15,3 +15,5 @@ INSERT INTO UserInfo
 VALUES(
 'User3', '2025-10-22', 0, '+380973455647', 12.7
 )
+
+SELECT * FROM UserInfo
