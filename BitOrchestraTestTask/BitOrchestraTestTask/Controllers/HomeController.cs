@@ -48,14 +48,22 @@ namespace BitOrchestraTestTask.Controllers
 		}
 
 		[HttpGet]
-		[Route("/uploadFile")]
+		//[Route("/uploadFile")]
 		public IActionResult GetUploadFileForm()
 		{
 			return View("Views/Form/UploadFileForm.cshtml");
 		}
 
 		[HttpGet]
-		[Route("/user")]
+		//[Route("/error")]
+		public IActionResult GetErrorPage(string message)
+		{
+			ErrorViewModel errorModel = new ErrorViewModel(message);
+			return View("/Views/Shared/Error.cshtml", errorModel);
+		}
+
+		[HttpGet]
+		//[Route("/user")]
 		public async Task<IActionResult> GetAllUsers()
 		{
 			Result<List<User>> result = new Result<List<User>>();
@@ -83,7 +91,8 @@ namespace BitOrchestraTestTask.Controllers
 			{
 				_logger.LogError(result.ErrorMessage);
 				ErrorViewModel errorViewModel = new ErrorViewModel(result.ErrorMessage);
-				return View("Error", errorViewModel);
+				return RedirectToAction("GetErrorPage", errorViewModel.ErrorMessage);
+				//return View("Error", errorViewModel);
 			}
 			return RedirectToAction("GetAllUsers");
 		}
@@ -103,13 +112,6 @@ namespace BitOrchestraTestTask.Controllers
 				return View("Error", errorViewModel);
 			}
 			return RedirectToAction("GetAllUsers");
-		}
-
-		[HttpGet]
-		[Route("/editUser")]
-		public IActionResult EditUserForm()
-		{
-			return View("Views/Form/EditUserForm.cshtml");
 		}
 	}
 }

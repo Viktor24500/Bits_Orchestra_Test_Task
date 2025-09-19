@@ -1,33 +1,33 @@
-﻿//function EditUser(index)
-//{
-//    debugger;
-//    let userId = document.getElementsByClassName("UserIdInTable")[index].textContent.trim();
-//    let userName = document.getElementsByClassName("UserNameInTable")[index].textContent.trim();
-//    let dateOfBirth = document.getElementsByClassName("DateOfBirthInTable")[index].textContent.trim();
-//    let married = document.getElementsByClassName("MarriedInTable")[index].textContent.trim();
-//    let phone = document.getElementsByClassName("PhoneInTable")[index].textContent.trim();
-//    let salary = document.getElementsByClassName("SalaryInTable")[index].textContent.trim();
-
-//    document.getElementById("Id").value = userId;
-//    document.getElementById("Name").value = userName;
-//    document.getElementById("DateOfBirth").value = dateOfBirth;
-
-//    document.getElementById("Married").checked = (married.toLowerCase() === "true");
-
-//    document.getElementById("Phone").value = phone;
-//    document.getElementById("Salary").value = salary;
-
-//    document.getElementsByClassName("formClass")[0].style.display = "block";
-//}
-
-function EditUser(button) {
+﻿function EditUser(button) {
     const row = button.closest('tr');
     let field;
     let value;
     row.querySelectorAll('.editable').forEach(cell => {
         field = cell.getAttribute('data-field');
         value = cell.textContent.trim();
-        cell.innerHTML = '<input type="text" name=' + field + ' value= ' + value +' />';
+        switch (field)
+        {
+            case 'DateOfBirth':
+                cell.innerHTML = `<input type="date" name="${field}" value="${value}" />`;
+                break;
+            case 'Married':
+                const isChecked = value.toLowerCase() === "true";
+                if (isChecked) {
+                    cell.innerHTML = `<input type="checkbox" name="${field}" isChecked='checked' checked/>`;
+                }
+                else
+                {
+                    cell.innerHTML = `<input type="checkbox" name="${field}" isChecked='' />`;
+                }
+                break;
+            case 'Salary':
+                cell.innerHTML = `<input type="number" min=0 step=0.01 name="${field}" value="${value}" />`;
+                break;
+            default:
+                cell.innerHTML = `<input type="text" name="${field}" value="${value}"/>`;
+                break;
+        }
+
     });
 
     // Toggle buttons
@@ -36,24 +36,17 @@ function EditUser(button) {
 }
 
 function SaveUser(button) {
-     const row = button.closest('tr');
-        const id = row.getAttribute('data-id');
-
-        const inputs = row.querySelectorAll('input');
-        const data = { Id: id };
+    const row = button.closest('tr');
+    const id = row.getAttribute('data-id');
+    const inputs = row.querySelectorAll('input');
+    const data = { Id: id };
+    const marriedCheckbox = row.querySelector('input[name="Married"]');
 
     inputs.forEach(input => {
-        debugger;
-        if (input.name == 'Married') {
-            data[input.name] = input.value.toLowerCase()==="true";
-        }
-        else {
-            data[input.name] = input.value;
-}
-        
-        });
+        data.Married = marriedCheckbox.checked;
+        data[input.name] = input.value;
+    });
 
-/*    debugger;*/
     let Http = new XMLHttpRequest();
     let url = `/Home/UpdateUser`
     Http.open("POST", url);
@@ -61,10 +54,16 @@ function SaveUser(button) {
     Http.send(JSON.stringify(data));
 
     Http.onreadystatechange = function () {
-        if (Http.readyState === 4 && Http.status === 200) {
-            console.log(Http.responseText);
+        if (Http.readyState === 4) {
             if (Http.status === 200) {
-                window.location.href = '/user';
+                window.location.href = '/Home/GetAllUsers';
+                row.querySelector('.editBtn').style.display = 'block';
+                row.querySelector('.saveBtn').style.display = 'none';
+            }
+            else
+            {
+                console.log(Http.responseText);
+                window.location.href = '/Home/GetErrorPage';
             }
         }
     };

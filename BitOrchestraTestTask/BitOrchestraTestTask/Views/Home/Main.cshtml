@@ -31,25 +31,3 @@
         }
     </tbody>
 </table>
-
-@* @using (Html.BeginForm("UpdateUser", "Home", FormMethod.Post, new { @class = "formClass" }))
-{
-    <input type="hidden" id="Id" name="Id" value="" />
-    <label for="Name">Name:</label>
-    <input type="text" id="Name" name="Name" value="" />
-    <br />
-    <label for="DateOfBirth">Date of Birth:</label>
-    <input type="date" id="DateOfBirth" name="DateOfBirth" value="" />
-    <br />
-    <label for="married">Married:</label>
-    <input type="checkbox" id="Married" name="Married" value="true" />
-    <br />
-    <label for="Phone">Phone:</label>
-    <input type"text" id="Phone" name="Phone" value="" />
-    <br />
-    <label for="Salary">Salary:</label>
-    <input type"salary" id="Salary" name="Salary" value="" />
-    <br />
-    <button type="submit">Save</button>
-    @Html.ActionLink("Back", "GetAllUsers")
-} *@

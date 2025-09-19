@@ -29,7 +29,7 @@ namespace BitOrchestraTestTask
 			app.MapControllerRoute(
 				name: "default",
 				//Home/user
-				pattern: "{controller=Home}/{action=user}/{id?}");
+				pattern: "{controller=Home}/{action=GetAllUsers}/{id?}");
 
 			app.Run();
 		}
