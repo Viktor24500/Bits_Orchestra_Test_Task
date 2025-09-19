@@ -1,16 +1,11 @@
-﻿﻿@{
-	Layout = null;
-}
-<head>
+﻿<head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
-
-
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-	<form action="/user" method="post" class="upload-form" enctype="multipart/form-data">
+	<form action="Home/CreateUsers" method="post" class="upload-form" enctype="multipart/form-data">
 		<div>
 			<div class="form-group">
 				<input type="file" class="input-field" name="inputFile" id="inputFile" value="" required>
@@ -18,6 +13,4 @@
 			</div>
 		</div>
 	</form>
-
-
 </body>

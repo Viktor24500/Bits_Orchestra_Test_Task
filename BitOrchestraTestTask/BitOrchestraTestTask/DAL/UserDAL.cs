@@ -28,14 +28,15 @@ namespace BitOrchestraTestTask.DAL
 					result.Data = new List<User>();
 					while (reader.Read())
 					{
-						User user = new User(
-							reader.GetInt32(reader.GetOrdinal("UserId")),
-							reader.GetString(reader.GetOrdinal("UserName")),
-							reader.GetDateTime(reader.GetOrdinal("DateOfBirth")),
-							reader.GetBoolean(reader.GetOrdinal("Married")),
-							reader.GetString(reader.GetOrdinal("Phone")),
-							reader.GetDecimal(reader.GetOrdinal("Salary"))
-							);
+						User user = new User
+						{
+							Id = reader.GetInt32(reader.GetOrdinal("UserId")),
+							Name = reader.GetString(reader.GetOrdinal("UserName")),
+							DateOfBirth = reader.GetDateTime(reader.GetOrdinal("DateOfBirth")),
+							Married = reader.GetBoolean(reader.GetOrdinal("Married")),
+							Phone = reader.GetString(reader.GetOrdinal("Phone")),
+							Salary = reader.GetDecimal(reader.GetOrdinal("Salary"))
+						};
 						result.Data.Add(user);
 					}
 					return result;
@@ -61,6 +62,54 @@ namespace BitOrchestraTestTask.DAL
 				}
 				return result;
 			}
+		}
+
+		public async Task<Result> CreateUsers(List<User> users)
+		{
+			Result result = new Result();
+			await using (SqlConnection connection = new SqlConnection(_configuration["ConnectionStrings:MainConnection"]))
+			{
+				connection.Open();
+				SqlTransaction transaction = connection.BeginTransaction();
+				SqlCommand command = connection.CreateCommand();
+				command.Connection = connection;
+				command.Transaction = transaction;
+				try
+				{
+					string sql = "INSERT INTO UserInfo (UserName, DateOfBirth, Married, Phone, Salary)" +
+						"VALUES(@name, @dateOfBirth, @married, @phone, @salary)";
+					for (int i = 0; i < users.Count; i++)
+					{
+						command.CommandText = sql;
+						command.Parameters.AddWithValue("@name", users[i].Name);
+						command.Parameters.AddWithValue("@dateOfBirth", users[i].DateOfBirth);
+						command.Parameters.AddWithValue("@married", users[i].Married);
+						command.Parameters.AddWithValue("@phone", users[i].Phone);
+						command.Parameters.AddWithValue("@salary", users[i].Salary);
+						int rowsAffected = await command.ExecuteNonQueryAsync();
+						if (rowsAffected <= 0)
+						{
+							transaction.Rollback();
+							result.ErrorCode = 500;
+							result.ErrorMessage = $"Failed to insert user int DB. User {i}";
+							_logger.LogError(result.ErrorMessage);
+							return result;
+						}
+						command.Parameters.Clear();
+					}
+					await transaction.CommitAsync();
+				}
+				catch (Exception ex)
+				{
+					transaction.Rollback();
+					_logger.LogError(ex, "Error creating users");
+					result.ErrorCode = ex.HResult;
+					result.ErrorMessage = ex.Message;
+					return result;
+				}
+			}
+			result.ErrorCode = 200;
+			return result;
 		}
 	}
 }
