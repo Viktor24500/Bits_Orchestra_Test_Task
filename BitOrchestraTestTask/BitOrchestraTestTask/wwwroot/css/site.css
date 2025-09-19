@@ -84,3 +84,15 @@ th {
     padding: 5px 12px 5px 9px;
     position: relative;
 }
+
+.formClass{
+    display:none;
+}
+
+.saveBtn{
+    display:none;
+}
+
+.editBtn {
+    display: block;
+}

@@ -9,22 +9,22 @@
             <th>Married</th>
             <th>Phone</th>
             <th>Salary</th>
-            <th></th>
-            <th></th>
+            <th colspan="3"></th>
         </tr>
     </thead>
     <tbody>
         @for (int i = 0; i < Model.Count(); i++) 
         {
-            <tr>
-                <td hidden>@Model[i].Id</td>
-                <td>@Model[i].Name</td>
-                <td>@Model[i].DateOfBirth.ToString()</td>
-                <td>@Model[i].Married</td>
-                <td>@Model[i].Phone</td>
-                <td>@Model[i].Salary.ToString()</td>
+            <tr data-id="@Model[i].Id">
+                <td class="UserIdTable" hidden>@Model[i].Id</td>
+                <td data-field="Name" class="editable">@Model[i].Name</td>
+                <td data-field="DateOfBirth" class="editable">@Model[i].DateOfBirth.ToString("yyyy-MM-dd")</td>
+                <td data-field="Married" class="editable">@Model[i].Married</td>
+                <td data-field="Phone" class="editable">@Model[i].Phone</td>
+                <td data-field="Salary" class="editable">@Model[i].Salary.ToString()</td>
                 @*<a href="UpdateUser/@Model[i].Id">Edit</a>*@
-                <td><button onclick="Edit(i)">Edit</button></td>
+                <td><button class ="editBtn" onclick="EditUser(this)">Edit</button></td>
+                <td><button class="saveBtn" onclick="SaveUser(this)">Save</button></td>
                 @*<a href="user/@Model[i].Id">Delete</a>*@
                 <td>@Html.ActionLink("Delete", "DeleteUser", new { id = Model[i].Id }, new{onclick="return confirm('Are you sure you want to delete this user?')"})</td>
             </tr>
@@ -32,23 +32,24 @@
     </tbody>
 </table>
 
-@Html.BeginForm("UpdateUser", "Home", FormMethod.Post))
+@* @using (Html.BeginForm("UpdateUser", "Home", FormMethod.Post, new { @class = "formClass" }))
 {
     <input type="hidden" id="Id" name="Id" value="" />
-    <label for="userName">Name:</label>
-    <input type="text" id="userName" value="" />
+    <label for="Name">Name:</label>
+    <input type="text" id="Name" name="Name" value="" />
     <br />
-    <label for="dateOfBirth">Date of Birth:</label>
-    <input type="date" id="dateOfBirth" value="" />
+    <label for="DateOfBirth">Date of Birth:</label>
+    <input type="date" id="DateOfBirth" name="DateOfBirth" value="" />
     <br />
     <label for="married">Married:</label>
-    <input type="checkbox" id="married" name="married" value="true" />
+    <input type="checkbox" id="Married" name="Married" value="true" />
     <br />
-    <label for="phone">Phone:</label>
-    <input type"text" id="phone" value="" />
+    <label for="Phone">Phone:</label>
+    <input type"text" id="Phone" name="Phone" value="" />
     <br />
-    <label for="salary">Salary:</label>
-    <input type"salary" id="number" value="" />
+    <label for="Salary">Salary:</label>
+    <input type"salary" id="Salary" name="Salary" value="" />
     <br />
     <button type="submit">Save</button>
-}
+    @Html.ActionLink("Back", "GetAllUsers")
+} *@

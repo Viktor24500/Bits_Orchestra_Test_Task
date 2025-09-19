@@ -88,9 +88,27 @@ namespace BitOrchestraTestTask.BL
 			return result;
 		}
 
-		public Result<User> UpdateUser()
+		public async Task<Result> UpdateUser(User user)
 		{
-			return null;
+			Result result = new Result();
+			result = ValidateUser(user);
+			if (result.ErrorCode != 200)
+			{
+				_logger.LogError(result.ErrorMessage);
+				return result;
+			}
+			ILogger<UserDAL> loggerDAL = new Logger<UserDAL>(new LoggerFactory());
+			IConfiguration configuration = new ConfigurationBuilder()
+	.AddJsonFile("appsettings.json")
+	.Build();
+			UserDAL userDAL = new UserDAL(loggerDAL, configuration);
+			result = await userDAL.UpdateUser(user);
+			if (result.ErrorCode != 200)
+			{
+				_logger.LogError(result.ErrorMessage);
+				return result;
+			}
+			return result;
 		}
 		public async Task<Result> DeleteUser(int id)
 		{
@@ -108,7 +126,7 @@ namespace BitOrchestraTestTask.BL
 	.Build();
 			UserDAL userDAL = new UserDAL(loggerDAL, configuration);
 			result = await userDAL.DeleteUser(id);
-			if (result.ErrorCode != 0)
+			if (result.ErrorCode != 200)
 			{
 				_logger.LogError(result.ErrorMessage);
 				return result;
@@ -253,6 +271,41 @@ namespace BitOrchestraTestTask.BL
 			}
 			result.ErrorCode = 200;
 			result.Data = user;
+			return result;
+		}
+
+		private Result ValidateUser(User user)
+		{
+			Result result = new Result();
+			if (user.Id < 0)
+			{
+				result.ErrorCode = 400;
+				result.ErrorMessage = "Id must be greater than zero";
+				_logger.LogError(result.ErrorMessage);
+				return result;
+			}
+			if (string.IsNullOrEmpty(user.Name))
+			{
+				result.ErrorCode = 400;
+				result.ErrorMessage = "Name can't be empty";
+				_logger.LogError(result.ErrorMessage);
+				return result;
+			}
+			if (string.IsNullOrEmpty(user.Phone))
+			{
+				result.ErrorCode = 400;
+				result.ErrorMessage = "Phone can't be empty";
+				_logger.LogError(result.ErrorMessage);
+				return result;
+			}
+			if (user.Salary < 0)
+			{
+				result.ErrorCode = 400;
+				result.ErrorMessage = "Salary must be greater than zero";
+				_logger.LogError(result.ErrorMessage);
+				return result;
+			}
+			result.ErrorCode = 200;
 			return result;
 		}
 	}

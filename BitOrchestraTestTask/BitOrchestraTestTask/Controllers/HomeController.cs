@@ -20,7 +20,7 @@ namespace BitOrchestraTestTask.Controllers
 			Result result = new Result();
 			try
 			{
-				if (inputFile == null || inputFile.Length == 0)
+				if (inputFile == null || inputFile.Length == 200)
 				{
 					return View("Error", new ErrorViewModel("File is empty"));
 				}
@@ -62,7 +62,7 @@ namespace BitOrchestraTestTask.Controllers
 			ILogger<UserService> loggerUserService = new Logger<UserService>(new LoggerFactory());
 			UserService userService = new UserService(loggerUserService);
 			result = await userService.GetAllUsers();
-			if (result.ErrorCode != 0)
+			if (result.ErrorCode != 200)
 			{
 				_logger.LogError(result.ErrorMessage);
 				ErrorViewModel errorViewModel = new ErrorViewModel(result.ErrorMessage);
@@ -72,15 +72,14 @@ namespace BitOrchestraTestTask.Controllers
 		}
 
 		[HttpPost]
-		//[HttpPut]
 		//[Route("/user/{id}")]
-		public async Task<IActionResult> UpdateUser([FromForm] UserUpdateRequest user)
+		public async Task<IActionResult> UpdateUser([FromBody] User user)
 		{
 			Result result = new Result();
 			ILogger<UserService> loggerUserService = new Logger<UserService>(new LoggerFactory());
 			UserService userService = new UserService(loggerUserService);
 			result = await userService.UpdateUser(user);
-			if (result.ErrorCode != 0)
+			if (result.ErrorCode != 200)
 			{
 				_logger.LogError(result.ErrorMessage);
 				ErrorViewModel errorViewModel = new ErrorViewModel(result.ErrorMessage);
@@ -97,13 +96,20 @@ namespace BitOrchestraTestTask.Controllers
 			ILogger<UserService> loggerUserService = new Logger<UserService>(new LoggerFactory());
 			UserService userService = new UserService(loggerUserService);
 			result = await userService.DeleteUser(id);
-			if (result.ErrorCode != 0)
+			if (result.ErrorCode != 200)
 			{
 				_logger.LogError(result.ErrorMessage);
 				ErrorViewModel errorViewModel = new ErrorViewModel(result.ErrorMessage);
 				return View("Error", errorViewModel);
 			}
 			return RedirectToAction("GetAllUsers");
+		}
+
+		[HttpGet]
+		[Route("/editUser")]
+		public IActionResult EditUserForm()
+		{
+			return View("Views/Form/EditUserForm.cshtml");
 		}
 	}
 }

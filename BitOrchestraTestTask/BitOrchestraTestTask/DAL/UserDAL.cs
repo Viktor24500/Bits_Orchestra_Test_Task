@@ -39,6 +39,7 @@ namespace BitOrchestraTestTask.DAL
 						};
 						result.Data.Add(user);
 					}
+					result.ErrorCode = 200;
 					return result;
 				}
 			}
@@ -60,6 +61,7 @@ namespace BitOrchestraTestTask.DAL
 					result.ErrorCode = 404;
 					result.ErrorMessage = "User not found";
 				}
+				result.ErrorCode = 200;
 				return result;
 			}
 		}
@@ -110,6 +112,33 @@ namespace BitOrchestraTestTask.DAL
 			}
 			result.ErrorCode = 200;
 			return result;
+		}
+
+		public async Task<Result> UpdateUser(User user)
+		{
+			Result result = new Result();
+			await using (SqlConnection connection = new SqlConnection(_configuration["ConnectionStrings:MainConnection"]))
+			{
+				connection.Open();
+				string sql = "UPDATE UserInfo SET UserName=@name, DateOfBirth=@dateOfBirth," +
+					"Married=@married, Phone=@phone, Salary=@salary Where UserId=@id";
+				SqlCommand command = new SqlCommand(sql, connection);
+				command.CommandType = CommandType.Text;
+				command.Parameters.AddWithValue("@id", user.Id);
+				command.Parameters.AddWithValue("@name", user.Name);
+				command.Parameters.AddWithValue("@dateOfBirth", user.DateOfBirth);
+				command.Parameters.AddWithValue("@married", user.Married);
+				command.Parameters.AddWithValue("@phone", user.Phone);
+				command.Parameters.AddWithValue("@salary", user.Salary);
+				int rowsAffected = await command.ExecuteNonQueryAsync();
+				if (rowsAffected == 0)
+				{
+					result.ErrorCode = 404;
+					result.ErrorMessage = "User not updated";
+				}
+				result.ErrorCode = 200;
+				return result;
+			}
 		}
 	}
 }
